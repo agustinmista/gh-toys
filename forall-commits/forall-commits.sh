@@ -92,11 +92,12 @@ PR_COMMITS_JSON=$( \
 
 # Run the specified command on each commit
 FAILED_COMMITS="false"
-echo ""
 while IFS= read -r commit; do
   COMMIT_SHA=$(jq -r '.sha' <<< "$commit")
   COMMIT_MESSAGE=$(jq -r .message <<< "$commit")
   COMMAND_OK="true"
+
+  echo ""
 
   # Checkout the commit
   echo "⚡️ Checking out ${COMMIT_SHA:0:7}: $COMMIT_MESSAGE"
@@ -134,20 +135,22 @@ while IFS= read -r commit; do
 
   # Continue with next commit or exit based on flag
   if [[ "$COMMAND_OK" == "false" ]]; then
+    FAILED_COMMITS="true"
     if [[ "$KEEP_GOING" == "true" ]]; then
-      FAILED_COMMITS="true"
       continue
+    else
+      break
     fi
   fi
-
-  echo ""
 done <<< "$(jq -c '.' <<< "$PR_COMMITS_JSON")"
 
 # Print summary
 if [[ "$FAILED_COMMITS" == "true" ]]; then
+  echo ""
   echo "❌ Some commits failed"
   exit 1
 else
+  echo ""
   echo "✅ All commits passed"
   exit 0
 fi
