@@ -21,9 +21,23 @@
           in
           lib.mapAttrs (name: _: f (dir + "/${name}")) subdirs;
 
+        scripts = forEachSubdir ./. (subdir: pkgs.callPackage subdir { });
+        allScripts = pkgs.symlinkJoin {
+          name = "gh-toys";
+          paths = lib.attrValues scripts;
+        };
+
       in
       {
-        packages = forEachSubdir ./. (subdir: pkgs.callPackage subdir { });
+        packages = scripts // {
+          default = allScripts;
+        };
+        devShells.default = pkgs.mkShell {
+          buildInputs = [
+            pkgs.gh
+            allScripts
+          ];
+        };
       }
     );
 }
