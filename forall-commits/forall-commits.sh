@@ -20,7 +20,7 @@ Options:
   -v, --verbose           Print command output while running
   -h, --help              Show this help and exit
 
-NOTE: you can multiple commands by escaping ; and && with a backlash.
+NOTE: you can run multiple commands by escaping ; and && with a backlash.
 
 For instance:
 $ forall-commits -- make build \&\& make test \; make format

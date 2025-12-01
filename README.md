@@ -35,7 +35,7 @@ forall-commits [options] command
 # Examples:
 forall-commits make build
 forall-commits -p 123 -k make test
-forall-commits make build && make test
+forall-commits make build \&\& make test
 ```
 
 ### merge-draft
