@@ -60,3 +60,28 @@ merge-draft
 merge-draft -p 123
 merge-draft --ignore-wip --ignore-checks
 ```
+
+### stack-pull-requests
+
+Create a stacked branch by cherry-picking commits from multiple pull requests on top of a base branch. Useful for quickly combining changes from several PRs into a single branch for testing or deployment. Builds a single `git cherry-pick` command, so it's still possible to resolve conficts as they appear.
+
+**Features:**
+
+- Stack commits from multiple PRs in order
+- Automatically skips commits already in base branch
+- Creates/updates a branch with naming convention `stacked/pr1-pr2-pr3-...`
+- Custom branch names with `-n/--name`
+- Dry-run mode to preview operations
+
+**Usage:**
+
+```bash
+stack-pull-requests [options] pr-number [pr-number ...]
+
+# Examples:
+stack-pull-requests 123
+stack-pull-requests 123 456 789
+stack-pull-requests -b develop 123 456
+stack-pull-requests -n my-custom-branch 123 456
+stack-pull-requests --dry-run 123 456
+```
